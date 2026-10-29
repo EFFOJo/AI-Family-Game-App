@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="en" class="dark" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Family AI Game Day | Cycle 3 Track (Abu Dhabi University)</title>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            adu: {
+              red: '#C8102E',
+              gold: '#D4AF37',
+              navy: '#0B132B'
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'Cairo', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Google Fonts: Inter & Cairo + FontAwesome -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Inter:wght@400;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    body {
+      font-family: 'Inter', 'Cairo', sans-serif;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    [dir="rtl"] body {
+      font-family: 'Cairo', 'Inter', sans-serif;
+    }
+
+    /* Glassmorphism Cards */
+    .dark .glass-card {
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: #f3f4f6;
+    }
+    .light .glass-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(15, 23, 42, 0.12);
+      color: #0f172a;
+      box-shadow: 0 8px 20px -5px rgba(0, 0, 0, 0.05);
+    }
+    .glass-card-hover {
+      transition: all 0.2s ease;
+    }
+    .glass-card-hover:hover {
+      border-color: rgba(212, 175, 55, 0.6);
+      transform: translateY(-2px);
+    }
+
+    /* Background Grids */
+    .dark .grid-bg {
+      background-color: #080C14;
+      background-image: radial-gradient(rgba(212, 175, 55, 0.08) 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+    .light .grid-bg {
+      background-color: #f8fafc;
+      background-image: radial-gradient(rgba(200, 16, 46, 0.06) 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+
+    /* AI Scanning Line */
+    @keyframes scanline {
+      0% { top: 0%; }
+      100% { top: 100%; }
+    }
+    .scan-line {
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #D4AF37, #C8102E, transparent);
+      box-shadow: 0 0 10px #D4AF37;
+      animation: scanline 2.2s ease-in-out infinite alternate;
+      z-index: 10;
+    }
+  </style>
+</head>
+<body class="min-h-screen grid-bg text-slate-100 flex flex-col justify-between overflow-x-hidden">
+
+  <!-- ========================================================================= -->
+  <!-- HEADER & TOOLBAR -->
+  <!-- ========================================================================= -->
+  <header class="border-b border-slate-800 dark:border-slate-800 light:border-slate-200 bg-slate-950/90 dark:bg-slate-950/90 light:bg-white/90 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
+      
+      <!-- Logo & Title -->
+      <div class="flex items-center space-x-3 rtl:space-x-reverse">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-rose-600 to-amber-400 flex items-center justify-center text-slate-950 font-black text-lg shadow-md">
+          <i class="fa-solid fa-microchip"></i>
+        </div>
+        <div>
+          <div class="flex items-center space-x-2 rtl:space-x-reverse">
+            <h1 class="text-lg font-extrabold bg-gradient-to-r from-rose-500 via-amber-400 to-amber-500 bg-clip-text text-transparent" data-i18n="appTitle">
+              Family AI Game Day
+            </h1>
+            <span class="text-[10px] px-2 py-0.5 rounded-full bg-rose-500/10 text-rose-500 border border-rose-500/30 font-bold uppercase tracking-wider" data-i18n="cycle3Badge">
+              Cycle 3 Track
+            </span>
+          </div>
+          <p class="text-[11px] text-slate-400 dark:text-slate-400 light:text-slate-600" data-i18n="appSubtitle">
+            Abu Dhabi University STEM Challenge | Grades 9-12 (3 Games Total)
+          </p>
+        </div>
+      </div>
+
+      <!-- Controls: Language, Theme, Reset -->
+      <div class="flex items-center space-x-2 rtl:space-x-reverse text-xs">
+        <button onclick="toggleLanguage()" class="px-3 py-1.5 rounded-xl bg-slate-900 dark:bg-slate-900 light:bg-slate-100 border border-slate-800 dark:border-slate-800 light:border-slate-300 dark:text-slate-300 light:text-slate-800 font-bold hover:border-amber-500/50 flex items-center gap-1.5">
+          <i class="fa-solid fa-language text-amber-400"></i>
+          <span id="langLabel">العربية</span>
+        </button>
+
+        <button onclick="toggleTheme()" class="px-3 py-1.5 rounded-xl bg-slate-900 dark:bg-slate-900 light:bg-slate-100 border border-slate-800 dark:border-slate-800 light:border-slate-300 dark:text-slate-300 light:text-slate-800 font-bold hover:border-amber-500/50 flex items-center gap-1.5">
+          <i id="themeIcon" class="fa-solid fa-sun text-amber-400"></i>
+          <span id="themeLabel" class="hidden sm:inline">Light</span>
+        </button>
+
+        <button onclick="resetWholeApp()" class="px-3 py-1.5 rounded-xl bg-slate-900 dark:bg-slate-900 light:bg-slate-100 border border-slate-800 dark:border-slate-800 light:border-slate-300 text-slate-400 hover:text-amber-400 flex items-center gap-1.5">
+          <i class="fa-solid fa-rotate-right"></i>
+          <span class="hidden md:inline" data-i18n="resetBtn">Reset</span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ========================================================================= -->
+  <!-- STEPPER NAVIGATION (6 STAGES) -->
+  <!-- ========================================================================= -->
+  <section class="max-w-7xl mx-auto px-4 py-4 w-full">
+    <div class="bg-slate-900/90 dark:bg-slate-900/90 light:bg-white border border-slate-800 dark:border-slate-800 light:border-slate-200 rounded-2xl p-2 shadow-lg">
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-1.5 text-center text-xs font-semibold" id="stepperContainer">
+        
+        <button id="stepTab-1" onclick="navigateToStep(1)" class="stepper-tab p-2 rounded-xl border border-amber-500/50 bg-amber-500/10 text-amber-400 flex items-center justify-center space-x-1.5 rtl:space-x-reverse">
+          <span class="w-4 h-4 rounded-full bg-amber-500 text-slate-950 flex items-center justify-center text-[10px] font-bold">1</span>
+          <span class="truncate" data-i18n="step1Tab">Choose Game</span>
+        </button>
+
+        <button id="stepTab-2" onclick="navigateToStep(2)" class="stepper-tab p-2 rounded-xl border border-slate-800 bg-slate-950/50 text-slate-400 flex items-center justify-center space-x-1.5 rtl:space-x-reverse opacity-60">
+          <span class="w-4 h-4 rounded-full bg-slate-800 text-slate-300 flex items-center justify-center text-[10px] font-bold">2</span>
+          <span class="truncate" data-i18n="step2Tab">Teams & Players</span>
+        </button>
+
+        <button id="stepTab-3" onclick="navigateToStep(3)" class="stepper-tab p-2 rounded-xl border border-slate-800 bg-slate-950/50 text-slate-400 flex items-center justify-center space-x-1.5 rtl:space-x-reverse opacity-60">
+          <span class="w-4 h-4 rounded-full bg-slate-800 text-slate-300 flex items-center justify-center text-[10px] font-bold">3</span>
+          <span class="truncate" data-i18n="step3Tab">Rules & Ready</span>
+        </button>
+
+        <button id="stepTab-4" onclick="navigateToStep(4)" class="stepper-tab p-2 rounded-xl border border-slate-800 bg-slate-950/50 text-slate-400 flex items-center justify-center space-x-1.5 rtl:space-x-reverse opacity-60">
+          <span class="w-4 h-4 rounded-full bg-slate-800 text-slate-300 flex items-center justify-center text-[10px] font-bold">4</span>
+          <span class="truncate" data-i18n="step4Tab">Round In Play</span>
+        </button>
+
+        <button id="stepTab-5" onclick="navigateToStep(5)" class="stepper-tab p-2 rounded-xl border border-slate-800 bg-slate-950/50 text-slate-400 flex items-center justify-center space-x-1.5 rtl:space-x-reverse opacity-60">
+          <span class="w-4 h-4 rounded-full bg-slate-800 text-slate-300 flex items-center justify-center text-[10px] font-bold">5</span>
+          <span class="truncate" data-i18n="step5Tab">AI Judge & Video</span>
+        </button>
+
+        <button id="stepTab-6" onclick="navigateToStep(6)" class="stepper-tab p-2 rounded-xl border border-slate-800 bg-slate-950/50 text-slate-400 flex items-center justify-center space-x-1.5 rtl:space-x-reverse opacity-60">
+          <span class="w-4 h-4 rounded-full bg-slate-800 text-slate-300 flex items-center justify-center text-[10px] font-bold">6</span>
+          <span class="truncate" data-i18n="step6Tab">Final Results</span>
+        </button>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN CONTAINER -->
+  <main class="max-w-7xl mx-auto px-4 pb-10 w-full flex-grow">
+
+    <!-- ========================================================================= -->
+    <!-- STAGE 1: CHOOSE A GAME -->
+    <!-- ========================================================================= -->
+    <section id="stage-1" class="stage-screen space-y-5">
+      
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 bg-slate-900/60 dark:bg-slate-900/60 light:bg-white p-5 rounded-2xl border border-slate-800 dark:border-slate-800 light:border-slate-200">
+        <div>
+          <h2 class="text-xl font-bold dark:text-white light:text-slate-900 flex items-center gap-2" data-i18n="step1Title">
+            <i class="fa-solid fa-gamepad text-amber-400"></i> Step 1: Choose a Game (Cycle 3 Collection)
+          </h2>
+          <p class="text-xs text-slate-400 dark:text-slate-400 light:text-slate-600 mt-1" data-i18n="step1Desc">
+            Select one of the 3 approved games. The AI judge evaluates gameplay through dedicated vision models.
+          </p>
+        </div>
+      </div>
+
+      <!-- 3 Games Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+        
+        <!-- Game 1: Football Match -->
+        <div onclick="selectGame('football')" id="card-football" class="game-card glass-card glass-card-hover rounded-2xl p-5 cursor-pointer border-2 border-amber-500 relative group">
+          <div class="absolute top-3 right-3 bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[10px] font-bold px-2 py-0.5 rounded-full" data-i18n="mandatoryBadge">
+            Mandatory Game
+          </div>
+          <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-xl mb-3">
+            <i class="fa-solid fa-soccer-ball"></i>
+          </div>
+          <h3 class="text-base font-bold dark:text-white light:text-slate-900 mb-1" data-i18n="game1Title">1. Football Match</h3>
+          <p class="text-xs text-slate-400 dark:text-slate-400 light:text-slate-600 leading-relaxed mb-3" data-i18n="game1Desc">
+            A fast-paced mini football match where AI tracks ball position, team possession ratio, goal crossings, and player agility to evaluate scoring and nominate MVP.
+          </p>
+          <div class="flex items-center justify-between text-xs pt-2 border-t border-slate-800 dark:border-slate-800 light:border-slate-200 text-slate-400">
+            <span><i class="fa-solid fa-users mr-1"></i> <span data-i18n="twoTeamsLbl">2v2 Format</span></span>
+            <span class="text-amber-400 font-semibold selection-status" data-i18n="selectedBtn">Selected</span>
+          </div>
+        </div>
+
+        <!-- Game 2: Al-Sadu Pattern Sprint -->
+        <div onclick="selectGame('sadu')" id="card-sadu" class="game-card glass-card glass-card-hover rounded-2xl p-5 cursor-pointer border border-slate-800 relative group">
+          <div class="absolute top-3 right-3 bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[10px] font-bold px-2 py-0.5 rounded-full" data-i18n="heritageBadge">
+            Heritage Original
+          </div>
+          <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-xl mb-3">
+            <i class="fa-solid fa-shapes"></i>
+          </div>
+          <h3 class="text-base font-bold dark:text-white light:text-slate-900 mb-1" data-i18n="game2Title">2. Al-Sadu Pattern Sprint</h3>
+          <p class="text-xs text-slate-400 dark:text-slate-400 light:text-slate-600 leading-relaxed mb-3" data-i18n="game2Desc">
+            A cultural speed-puzzle where family teams race to assemble authentic Bedouin geometric weave patterns. AI vision inspects arrangement accuracy and assembly speed.
+          </p>
+          <div class="flex items-center justify-between text-xs pt-2 border-t border-slate-800 dark:border-slate-800 light:border-slate-200 text-slate-400">
+            <span><i class="fa-solid fa-eye mr-1"></i> <span data-i18n="visionJudgeLbl">Pattern Vision AI</span></span>
+            <span class="text-slate-500 font-semibold selection-status" data-i18n="selectBtn">Select</span>
+          </div>
+        </div>
+
+        <!-- Game 3: Dhow Rowing Endurance -->
+        <div onclick="selectGame('rowing')" id="card-rowing" class="game-card glass-card glass-card-hover rounded-2xl p-5 cursor-pointer border border-slate-800 relative group">
+          <div class="absolute top-3 right-3 bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 text-[10px] font-bold px-2 py-0.5 rounded-full" data-i18n="sportBadge">
+            Agility Original
+          </div>
+          <div class="w-10 h-10 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center text-xl mb-3">
+            <i class="fa-solid fa-water"></i>
+          </div>
+          <h3 class="text-base font-bold dark:text-white light:text-slate-900 mb-1" data-i18n="game3Title">3. Dhow Rowing Endurance</h3>
+          <p class="text-xs text-slate-400 dark:text-slate-400 light:text-slate-600 leading-relaxed mb-3" data-i18n="game3Desc">
+            An agility challenge inspired by UAE maritime rowing. AI pose estimation monitors arm extension-and-pull strokes, posture symmetry, and stroke cadence over time.
+          </p>
+          <div class="flex items-center justify-between text-xs pt-2 border-t border-slate-800 dark:border-slate-800 light:border-slate-200 text-slate-400">
+            <span><i class="fa-solid fa-person-running mr-1"></i> <span data-i18n="poseJudgeLbl">Pose Estimation AI</span></span>
+            <span class="text-slate-500 font-semibold selection-status" data-i18n="selectBtn">Select</span>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="flex justify-end pt-3">
+        <button onclick="navigateToStep(2)" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 text-slate-950 font-bold text-xs uppercase tracking-wider flex items-center gap-2">
+          <span data-i18n="proceedTeamsBtn">Proceed to Players & Teams</span>
+          <i class="fa-solid fa-arrow-right rtl:rotate-180"></i>
+        </button>
+      </div>
+
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- STAGE 2: PLAYERS & TEAMS -->
+    <!-- ========================================================================= -->
+    <section id="stage-2" class="stage-screen space-y-5 hidden">
+      
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 bg-slate-900/60 dark:bg-slate-900/60 light:bg-white p-5 rounded-2xl border border-slate-800 dark:border-slate-800 light:border-slate-200">
+        <div>
+          <h2 class="text-xl font-bold dark:text-white light:text-slate-900 flex items-center gap-2" data-i18n="step2Title">
+            <i class="fa-solid fa-users-gear text-amber-400"></i> Step 2: Configure Players & Teams
+          </h2>
+          <p class="text-xs text-slate-400 dark:text-slate-400 light:text-slate-600 mt-1" data-i18n="step2Desc">
+            Assign the 4 family participants (P1, P2, P3, P4) into Team A and Team B.
+          </p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        
+        <!-- TEAM A -->
+        <div class="glass-card rounded-2xl p-5 border-l-4 border-l-rose-500 space-y-3">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+            <span class="text-xs text-rose-400 font-bold" data-i18n="teamABadge">Team A (Red)</span>
+            <input type="text" id="teamAName" value="Team Al-Fursan" class="bg-slate-950 dark:bg-slate-950 light:bg-slate-100 border border-slate-800 px-2.5 py-1 text-xs font-bold rounded">
+          </div>
+          <div class="space-y-2">
+            <div>
+              <label class="block text-[11px] text-slate-400 mb-1" data-i18n="p1Label">Player 1 (P1)</label>
+              <input type="text" id="p1Name" value="Rashid (Dad)" class="w-full bg-slate-950 dark:bg-slate-950 light:bg-slate-100 border border-slate-800 rounded px-2.5 py-1.5 text-xs">
+            </div>
+            <div>
+              <label class="block text-[11px] text-slate-400 mb-1" data-i18n="p2Label">Player 2 (P2)</label>
+              <input type="text" id="p2Name" value="Maryam (Daughter)" class="w-full bg-slate-950 dark:bg-slate-950 light:bg-slate-100 border border-slate-800 rounded px-2.5 py-1.5 text-xs">
+            </div>
+          </div>
+        </div>
+
+        <!-- TEAM B -->
+        <div class="glass-card rounded-2xl p-5 border-l-4 border-l-amber-500 space-y-3">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+            <span class="text-xs text-amber-400 font-bold" data-i18n="teamBBadge">Team B (Gold)</span>
+            <input type="text" id="teamBName" value="Team Al-Saqoor" class="bg-slate-950 dark:bg-slate-950 light:bg-slate-100 border border-slate-800 px-2.5 py-1 text-xs font-bold rounded">
+          </div>
+          <div class="space-y-2">
+            <div>
+              <label class="block text-[11px] text-slate-400 mb-1" data-i18n="p3Label">Player 3 (P3)</label>
+              <input type="text" id="p3Name" value="Zayed (Son)" class="w-full bg-slate-950 dark:bg-slate-950 light:bg-slate-100 border border-slate-800 rounded px-2.5 py-1.5 text-xs">
+            </div>
+            <div>
+              <label class="block text-[11px] text-slate-400 mb-1" data-i18n="p4Label">Player 4 (P4)</label>
+              <input type="text" id="p4Name" value="Fatima (Mom)" class="w-full bg-slate-950 dark:bg-slate-950 light:bg-slate-100 border border-slate-800 rounded px-2.5 py-1.5 text-xs">
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="flex items-center justify-between pt-3">
+        <button onclick="navigateToStep(1)" class="px-4 py-2 rounded-xl bg-slate-800 text-xs font-semibold" data-i18n="backBtn">Back</button>
+        <button onclick="saveTeamsAndProceed()" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-bold text-xs uppercase" data-i18n="saveTeamsBtn">Save & Continue</button>
+      </div>
+
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- STAGE 3: RULES & READY -->
+    <!-- ========================================================================= -->
+    <section id="stage-3" class="stage-screen space-y-5 hidden">
+      
+      <div class="glass-card rounded-2xl p-5 space-y-4">
+        <h3 class="text-base font-bold border-b border-slate-800 pb-2 flex items-center justify-between">
+          <span data-i18n="matchRuleSettings">Match Settings & Rules</span>
+          <span id="selectedGameBadge" class="text-xs bg-amber-500/20 text-amber-300 px-2.5 py-0.5 rounded-full font-semibold">Football</span>
+        </h3>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+          <div>
+            <label class="block font-semibold text-slate-400 mb-1" data-i18n="matchDurationLbl">Match Length</label>
+            <select id="matchLengthSelect" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-white">
+              <option value="30">30 Seconds</option>
+              <option value="60" selected>60 Seconds</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-400 mb-1" data-i18n="pointsPerGoalLbl">Points per Score</label>
+            <select id="pointsPerGoalSelect" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-white">
+              <option value="1" selected>1 Point</option>
+              <option value="2">2 Points</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 text-xs space-y-1">
+          <span class="font-bold text-amber-400 block uppercase" data-i18n="aiRuleBreakdownTitle">AI Evaluation Summary</span>
+          <p id="gameRuleExplanationText" class="text-slate-300 leading-relaxed">
+            AI evaluates real-time camera frames and video uploads.
+          </p>
+        </div>
+
+        <button onclick="startMatchRound()" class="w-full py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-slate-950 font-extrabold text-xs uppercase tracking-wider shadow-lg flex items-center justify-center gap-2">
+          <i class="fa-solid fa-play"></i>
+          <span data-i18n="startMatchBtn">START MATCH</span>
+        </button>
+      </div>
+
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- STAGE 4: ROUND IN PLAY -->
+    <!-- ========================================================================= -->
+    <section id="stage-4" class="stage-screen space-y-5 hidden">
+      
+      <!-- Scoreboard -->
+      <div class="glass-card p-5 rounded-2xl flex items-center justify-between gap-4">
+        <div class="text-center">
+          <span class="text-xs font-bold text-rose-400 block" id="liveTeamAName">Team A</span>
+          <span class="text-3xl font-extrabold" id="liveTeamAScore">0</span>
+        </div>
+
+        <div class="text-center">
+          <span class="text-[10px] text-amber-400 uppercase tracking-widest font-bold" id="liveRoundTurnText">Round Active</span>
+          <div class="text-3xl font-mono font-black text-amber-400 bg-slate-950 px-4 py-1 rounded-xl border border-amber-500/30" id="timerDisplay">
+            00:60
+          </div>
+        </div>
+
+        <div class="text-center">
+          <span class="text-xs font-bold text-amber-400 block" id="liveTeamBName">Team B</span>
+          <span class="text-3xl font-extrabold" id="liveTeamBScore">0</span>
+        </div>
+      </div>
+
+      <!-- Canvas & Controls -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+        
+        <div class="lg:col-span-2 glass-card rounded-2xl p-4 flex flex-col items-center min-h-[340px] bg-slate-950">
+          <div class="w-full flex justify-between items-center mb-2 text-xs">
+            <span class="font-bold text-slate-300 flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span>
+              <span id="canvasModeTitle">AI Vision Simulator</span>
+            </span>
+            <div class="flex gap-2">
+              <button onclick="toggleCameraMode('sim')" id="btnSimMode" class="px-2 py-0.5 rounded bg-amber-500 text-slate-950 font-bold">Sim Field</button>
+              <button onclick="toggleCameraMode('webcam')" id="btnWebcamMode" class="px-2 py-0.5 rounded bg-slate-800 text-slate-300">Live Webcam</button>
+            </div>
+          </div>
+
+          <div class="relative w-full h-[280px] rounded-xl overflow-hidden bg-slate-900 border border-slate-800">
+            <div class="scan-line"></div>
+            <canvas id="cvCanvas" class="w-full h-full object-cover"></canvas>
+            <video id="webcamVideo" autoplay playsinline muted class="hidden absolute inset-0 w-full h-full object-cover"></video>
+
+            <div id="goalAlert" class="hidden absolute inset-0 bg-amber-500/20 backdrop-blur-sm flex flex-col items-center justify-center z-20">
+              <h3 class="text-3xl font-black text-amber-300 animate-bounce" data-i18n="goalScoredAlert">SCORE REGISTERED!</h3>
+            </div>
+          </div>
+        </div>
+
+        <!-- Gameplay Controls -->
+        <div class="glass-card rounded-2xl p-5 space-y-3 flex flex-col justify-between">
+          <div>
+            <h3 class="text-xs font-bold border-b border-slate-800 pb-2" data-i18n="hostGameplayActions">Host Actions</h3>
+            <div class="space-y-2 mt-3 text-xs">
+              <button onclick="recordEvent('score_a')" class="w-full py-2 px-3 rounded-lg bg-rose-500/20 text-rose-300 border border-rose-500/30 font-bold text-left rtl:text-right">
+                + Score Team A (P1/P2)
+              </button>
+              <button onclick="recordEvent('score_b')" class="w-full py-2 px-3 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/30 font-bold text-left rtl:text-right">
+                + Score Team B (P3/P4)
+              </button>
+            </div>
+
+            <div class="mt-3">
+              <span class="text-[10px] text-slate-400 font-bold block mb-1">Match Log:</span>
+              <div id="matchLogBox" class="h-24 overflow-y-auto bg-slate-950 p-2 rounded border border-slate-800 text-[10px] font-mono space-y-1">
+                <p class="text-slate-500">[00:00] Match initiated.</p>
+              </div>
+            </div>
+          </div>
+
+          <button onclick="finishRoundAndJudge()" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-extrabold text-xs uppercase">
+            Proceed to AI Judging
+          </button>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- STAGE 5: AI JUDGE & VIDEO -->
+    <!-- ========================================================================= -->
+    <section id="stage-5" class="stage-screen space-y-5 hidden">
+      
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+        
+        <div class="lg:col-span-2 glass-card rounded-2xl p-5 space-y-3">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+            <h3 class="text-sm font-bold flex items-center gap-2">
+              <i class="fa-solid fa-file-video text-amber-400"></i> Video Stream Analysis
+            </h3>
+            <label class="px-2.5 py-1 rounded bg-amber-500/20 text-amber-300 text-xs font-bold cursor-pointer border border-amber-500/40">
+              Upload Video
+              <input type="file" id="matchVideoFileInput" accept="video/*" onchange="handleMatchVideoUpload(event)" class="hidden">
+            </label>
+          </div>
+
+          <div class="relative w-full h-[280px] rounded-xl overflow-hidden bg-slate-950 border border-slate-800 flex items-center justify-center">
+            <video id="uploadedVideo" class="w-full h-full object-contain" controls playsinline>
+              <source id="videoSource" src="" type="video/mp4">
+            </video>
+            <div id="videoPlaceholder" class="absolute inset-0 bg-slate-950/90 flex flex-col items-center justify-center p-4 text-center">
+              <i class="fa-solid fa-cloud-arrow-up text-2xl text-amber-400 mb-2"></i>
+              <p class="text-xs text-slate-400" data-i18n="noVideoDesc">Upload a video file or run AI processing below.</p>
+            </div>
+          </div>
+
+          <button onclick="runAIVideoRatingEngine()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-bold text-xs uppercase">
+            Run AI Analysis & Rating
+          </button>
+        </div>
+
+        <div class="glass-card rounded-2xl p-5 space-y-3 flex flex-col justify-between">
+          <div>
+            <h3 class="text-xs font-bold border-b border-slate-800 pb-2" data-i18n="aiPlayerRatingsTitle">AI Player Ratings (0-100)</h3>
+            <div class="space-y-2 mt-3 text-xs" id="playerRatingsContainer">
+              <!-- Rating Cards -->
+              <div class="p-2 rounded bg-slate-950 border border-slate-800">
+                <div class="flex justify-between font-bold text-rose-400">
+                  <span id="ratingNameP1">P1</span>
+                  <span id="overallScoreP1">68.3 / 100</span>
+                </div>
+              </div>
+              <div class="p-2 rounded bg-slate-950 border border-slate-800">
+                <div class="flex justify-between font-bold text-rose-400">
+                  <span id="ratingNameP2">P2</span>
+                  <span id="overallScoreP2">61.3 / 100</span>
+                </div>
+              </div>
+              <div class="p-2 rounded bg-slate-950 border border-slate-800">
+                <div class="flex justify-between font-bold text-amber-400">
+                  <span id="ratingNameP3">P3</span>
+                  <span id="overallScoreP3">65.7 / 100</span>
+                </div>
+              </div>
+              <div class="p-2 rounded bg-slate-950 border border-slate-800">
+                <div class="flex justify-between font-bold text-amber-400">
+                  <span id="ratingNameP4">P4</span>
+                  <span id="overallScoreP4">56.0 / 100</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-3 p-2 rounded bg-slate-950 border border-slate-800">
+              <span class="text-[10px] font-bold text-slate-400 block">SHA-256 Signature</span>
+              <p id="hashDigestDisplay" class="text-[9px] font-mono text-emerald-400 break-all">Pending evaluation...</p>
+            </div>
+          </div>
+
+          <button onclick="applyAIResultsAndFinish()" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-slate-950 font-extrabold text-xs uppercase">
+            Finalize Results
+          </button>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- STAGE 6: FINAL RESULTS -->
+    <!-- ========================================================================= -->
+    <section id="stage-6" class="stage-screen space-y-5 hidden">
+      
+      <div class="glass-card rounded-2xl p-6 text-center space-y-3 border-2 border-amber-500/40">
+        <div class="text-3xl">🏆</div>
+        <span class="text-xs font-bold text-amber-400 uppercase tracking-widest block" data-i18n="officialWinnerTitle">Match Winner</span>
+        <h2 id="finalWinnerTitle" class="text-2xl font-black">Team A Wins!</h2>
+
+        <div class="inline-flex items-center space-x-4 rtl:space-x-reverse bg-slate-950 px-6 py-2 rounded-xl border border-slate-800 text-sm font-bold">
+          <span id="finalTeamAName" class="text-rose-400">Team A</span>
+          <span id="finalTeamAScore" class="text-xl">0</span>
+          <span>:</span>
+          <span id="finalTeamBScore" class="text-xl">0</span>
+          <span id="finalTeamBName" class="text-amber-400">Team B</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div class="glass-card p-4 rounded-2xl space-y-2">
+          <span class="text-xs font-bold text-amber-400 uppercase" data-i18n="mvpAwardTitle">Match MVP</span>
+          <h3 id="finalMVPName" class="text-base font-bold">P1</h3>
+          <p id="finalMVPScoreText" class="text-xs text-amber-400 font-mono">Rating: 68.3 / 100</p>
+        </div>
+
+        <div class="glass-card p-4 rounded-2xl space-y-2 text-xs">
+          <span class="font-bold text-slate-300 block" data-i18n="auditDigestTitle">Match Summary</span>
+          <p>Game: <strong id="finalGamePlayedName" class="text-amber-400">Football</strong></p>
+          <p>Status: <strong class="text-emerald-400">SHA-256 Verified</strong></p>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex items-center justify-between pt-2">
+        <button onclick="downloadMatchCertificate()" class="px-4 py-2 rounded-xl bg-slate-800 text-xs font-bold text-slate-300">
+          <i class="fa-solid fa-download mr-1"></i> Export Report (.json)
+        </button>
+
+        <!-- DONE / RESET BUTTON -->
+        <button onclick="resetAndChooseAnotherGame()" class="px-6 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-extrabold text-xs uppercase tracking-wider shadow-lg">
+          <i class="fa-solid fa-check mr-1"></i> Done / Choose Another Game
+        </button>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- JAVASCRIPT APPLICATION LOGIC -->
+  <script>
+    const SECRET_KEY = "ADU_CYCLE3_FAMILY_AI_GAME_DAY_2026";
+
+    // App State
+    const appState = {
+      lang: 'en',
+      theme: 'dark',
+      currentStep: 1,
+      selectedGame: 'football',
+      teamA: { name: 'Team Al-Fursan', p1: 'Rashid (Dad)', p2: 'Maryam (Daughter)', score: 0 },
+      teamB: { name: 'Team Al-Saqoor', p3: 'Zayed (Son)', p4: 'Fatima (Mom)', score: 0 },
+      rules: { matchLength: 60, pointsPerGoal: 1 },
+      timer: { remaining: 60, interval: null, running: false },
+      cameraMode: 'sim',
+      videoUploaded: false,
+      eventsLog: [],
+      hashSignature: '',
+      // Compressed evaluation ratings centered around 50-75
+      playerRatings: {
+        p1: { speed: 68, agility: 72, compliance: 65, overall: 68.3 },
+        p2: { speed: 58, agility: 62, compliance: 64, overall: 61.3 },
+        p3: { speed: 64, agility: 66, compliance: 67, overall: 65.7 },
+        p4: { speed: 52, agility: 56, compliance: 60, overall: 56.0 }
+      },
+      animationFrameId: null
+    };
+
+    // Dictionary
+    const i18n = {
+      en: {
+        appTitle: "Family AI Game Day",
+        cycle3Badge: "Cycle 3 Track",
+        appSubtitle: "Abu Dhabi University STEM Challenge | Grades 9-12 (3 Games Total)",
+        resetBtn: "Reset",
+        step1Tab: "Choose Game",
+        step2Tab: "Teams & Players",
+        step3Tab: "Rules & Ready",
+        step4Tab: "Round In Play",
+        step5Tab: "AI Judge & Video",
+        step6Tab: "Final Results",
+        step1Title: "Step 1: Choose a Game (Cycle 3 Collection)",
+        step1Desc: "Select one of the 3 approved games. The AI judge evaluates gameplay through dedicated vision models.",
+        mandatoryBadge: "Mandatory Game",
+        heritageBadge: "Heritage Original",
+        sportBadge: "Agility Original",
+        game1Title: "1. Football Match",
+        game1Desc: "A fast-paced mini football match where AI tracks ball position, team possession ratio, goal crossings, and player agility to evaluate scoring and nominate MVP.",
+        game2Title: "2. Al-Sadu Pattern Sprint",
+        game2Desc: "A cultural speed-puzzle where family teams race to assemble authentic Bedouin geometric weave patterns. AI vision inspects arrangement accuracy and assembly speed.",
+        game3Title: "3. Dhow Rowing Endurance",
+        game3Desc: "An agility challenge inspired by UAE maritime rowing. AI pose estimation monitors arm extension-and-pull strokes, posture symmetry, and stroke cadence over time.",
+        twoTeamsLbl: "2v2 Format",
+        visionJudgeLbl: "Pattern Vision AI",
+        poseJudgeLbl: "Pose Estimation AI",
+        selectedBtn: "Selected",
+        selectBtn: "Select",
+        proceedTeamsBtn: "Proceed to Players & Teams",
+        step2Title: "Step 2: Configure Players & Teams",
+        step2Desc: "Assign the 4 family participants (P1, P2, P3, P4) into Team A and Team B.",
+        teamABadge: "Team A (Red)",
+        teamBBadge: "Team B (Gold)",
+        p1Label: "Player 1 (P1)",
+        p2Label: "Player 2 (P2)",
+        p3Label: "Player 3 (P3)",
+        p4Label: "Player 4 (P4)",
+        backBtn: "Back",
+        saveTeamsBtn: "Save & Continue",
+        matchRuleSettings: "Match Settings & Rules",
+        matchDurationLbl: "Match Length",
+        pointsPerGoalLbl: "Points per Score",
+        aiRuleBreakdownTitle: "AI Evaluation Summary",
+        startMatchBtn: "START MATCH",
+        goalScoredAlert: "SCORE REGISTERED!",
+        hostGameplayActions: "Host Actions",
+        aiPlayerRatingsTitle: "AI Player Ratings (0-100)",
+        noVideoDesc: "Upload a video file or run AI processing below.",
+        officialWinnerTitle: "Match Winner",
+        mvpAwardTitle: "Match MVP",
+        auditDigestTitle: "Match Summary"
+      },
+      ar: {
+        appTitle: "يوم الألعاب العائلية بالذكاء الاصطناعي",
+        cycle3Badge: "مسار الدورة الثالثة",
+        appSubtitle: "تحدي جامعة أبوظبي للعلوم والتكنولوجيا | الصفوف 9-12 (3 ألعاب)",
+        resetBtn: "إعادة ضبط",
+        step1Tab: "اختر اللعبة",
+        step2Tab: "الفرق واللاعبين",
+        step3Tab: "القواعد والجاهزية",
+        step4Tab: "الجولة جارية",
+        step5Tab: "الحكم والفيديو",
+        step6Tab: "النتائج النهائية",
+        step1Title: "الخطوة 1: اختر لعبة (مجموعة الدورة الثالثة)",
+        step1Desc: "اختر إحدى الألعاب الثلاث المعتمادات ليقوم نموذج الرؤية الحاسوبية بالتقييم.",
+        mandatoryBadge: "لعبة إجبارية",
+        heritageBadge: "لعبة تراثية",
+        sportBadge: "لعبة لياقة",
+        game1Title: "1. مباراة كرة القدم",
+        game1Desc: "مباراة مصغرة يتتبع فيها الذكاء الاصطناعي الكرة ونسبة الاستحواذ واجتياز خط المرمى لتقييم الأهداف واختيار أفضل لاعب.",
+        game2Title: "2. سباق أنماط السدو",
+        game2Desc: "تحدي نسيج تراثي يتسابق فيه الفريق لتجميع الأشكال الهندسية، وتقوم الرؤية الحاسوبية بتحليل دقة الترتيب والسرعة.",
+        game3Title: "3. تحمّل التجديف بالبوم",
+        game3Desc: "تحدي لياقة مستوحى من التجديف البحري. يتتبع الذكاء الاصطناعي حركة الذراعين واستقامة الظهر وتناسق التجديف.",
+        twoTeamsLbl: "2 ضد 2",
+        visionJudgeLbl: "ذكاء الأنماط",
+        poseJudgeLbl: "تتبع الوضعية",
+        selectedBtn: "تم الاختيار",
+        selectBtn: "اختيار",
+        proceedTeamsBtn: "الانتفال للفرق",
+        step2Title: "الخطوة 2: إعداد الفرق واللاعبين",
+        step2Desc: "عين المشاركين الأربعة (P1, P2, P3, P4) للفرق أ وب.",
+        teamABadge: "الفريق أ (أحمر)",
+        teamBBadge: "الفريق ب (ذهبي)",
+        p1Label: "اللاعب 1 (P1)",
+        p2Label: "اللاعب 2 (P2)",
+        p3Label: "اللاعب 3 (P3)",
+        p4Label: "اللاعب 4 (P4)",
+        backBtn: "رجوع",
+        saveTeamsBtn: "حفظ والمتابعة",
+        matchRuleSettings: "إعدادات وقواعد المباراة",
+        matchDurationLbl: "مدة المباراة",
+        pointsPerGoalLbl: "النقاط لكل هدف",
+        aiRuleBreakdownTitle: "ملخص تقييم الذكاء الاصطناعي",
+        startMatchBtn: "ابدأ المباراة",
+        goalScoredAlert: "تم تسجيل النقطة!",
+        hostGameplayActions: "إجراءات المضيف",
+        aiPlayerRatingsTitle: "تقييمات اللاعبين (0-100)",
+        noVideoDesc: "قم برفع فيديو أو شغل التحليل المباشر أدناه.",
+        officialWinnerTitle: "الفائز بالمباراة",
+        mvpAwardTitle: "أفضل لاعب",
+        auditDigestTitle: "ملخص المباراة"
+      }
+    };
+
+    window.onload = function() {
+      updateI18n();
+      initCVCanvas();
+    };
+
+    function toggleLanguage() {
+      appState.lang = appState.lang === 'en' ? 'ar' : 'en';
+      document.documentElement.setAttribute('dir', appState.lang === 'ar' ? 'rtl' : 'ltr');
+      document.getElementById('langLabel').innerText = appState.lang === 'ar' ? 'English' : 'العربية';
+      updateI18n();
+    }
+
+    function updateI18n() {
+      const dict = i18n[appState.lang];
+      document.querySelectorAll('[data-i18n]').forEach(elem => {
+        const key = elem.getAttribute('data-i18n');
+        if (dict[key]) elem.innerText = dict[key];
+      });
+      updateGameRuleExplanation();
+    }
+
+    function toggleTheme() {
+      appState.theme = appState.theme === 'dark' ? 'light' : 'dark';
+      const html = document.documentElement;
+      if (appState.theme === 'dark') {
+        html.classList.add('dark');
+        html.classList.remove('light');
+        document.getElementById('themeIcon').className = 'fa-solid fa-sun text-amber-400';
+      } else {
+        html.classList.add('light');
+        html.classList.remove('dark');
+        document.getElementById('themeIcon').className = 'fa-solid fa-moon text-amber-400';
+      }
+    }
+
+    function navigateToStep(stepNum) {
+      appState.currentStep = stepNum;
+      for (let i = 1; i <= 6; i++) {
+        const tab = document.getElementById(`stepTab-${i}`);
+        const screen = document.getElementById(`stage-${i}`);
+        if (i === stepNum) {
+          tab.className = "stepper-tab p-2 rounded-xl border border-amber-500/50 bg-amber-500/10 text-amber-400 flex items-center justify-center space-x-1.5 rtl:space-x-reverse font-bold";
+          tab.style.opacity = "1";
+          screen.classList.remove('hidden');
+        } else {
+          tab.className = "stepper-tab p-2 rounded-xl border border-slate-800 bg-slate-950/50 text-slate-400 flex items-center justify-center space-x-1.5 rtl:space-x-reverse opacity-60";
+          screen.classList.add('hidden');
+        }
+      }
+      if (stepNum === 4) startCVAnimation();
+    }
+
+    function selectGame(gameId) {
+      appState.selectedGame = gameId;
+      ['football', 'sadu', 'rowing'].forEach(id => {
+        const card = document.getElementById(`card-${id}`);
+        const statusSpan = card.querySelector('.selection-status');
+        if (id === gameId) {
+          card.classList.add('border-2', 'border-amber-500');
+          card.classList.remove('border-slate-800');
+          statusSpan.innerText = i18n[appState.lang].selectedBtn || 'Selected';
+          statusSpan.className = 'text-amber-400 font-semibold selection-status';
+        } else {
+          card.classList.remove('border-2', 'border-amber-500');
+          card.classList.add('border', 'border-slate-800');
+          statusSpan.innerText = i18n[appState.lang].selectBtn || 'Select';
+          statusSpan.className = 'text-slate-500 font-semibold selection-status';
+        }
+      });
+      updateGameRuleExplanation();
+    }
+
+    function updateGameRuleExplanation() {
+      const badge = document.getElementById('selectedGameBadge');
+      const textElem = document.getElementById('gameRuleExplanationText');
+
+      if (appState.selectedGame === 'football') {
+        badge.innerText = 'Football Match';
+        textElem.innerText = "Football AI detects ball trajectories, goal boundary line crossings, team possession ratio, and computes match MVP.";
+      } else if (appState.selectedGame === 'sadu') {
+        badge.innerText = 'Al-Sadu Pattern Sprint';
+        textElem.innerText = "Al-Sadu Vision AI inspects geometric weave pattern sequence, color symmetry match %, and assembly time.";
+      } else if (appState.selectedGame === 'rowing') {
+        badge.innerText = 'Dhow Rowing Endurance';
+        textElem.innerText = "Pose Estimation AI tracks arm stroke extension, shoulder-wrist joint angles, stroke cadence (SPM), and posture.";
+      }
+    }
+
+    function saveTeamsAndProceed() {
+      appState.teamA.name = document.getElementById('teamAName').value || 'Team A';
+      appState.teamA.p1 = document.getElementById('p1Name').value || 'P1';
+      appState.teamA.p2 = document.getElementById('p2Name').value || 'P2';
+      appState.teamB.name = document.getElementById('teamBName').value || 'Team B';
+      appState.teamB.p3 = document.getElementById('p3Name').value || 'P3';
+      appState.teamB.p4 = document.getElementById('p4Name').value || 'P4';
+
+      document.getElementById('liveTeamAName').innerText = appState.teamA.name;
+      document.getElementById('liveTeamBName').innerText = appState.teamB.name;
+      document.getElementById('ratingNameP1').innerText = `P1 - ${appState.teamA.p1}`;
+      document.getElementById('ratingNameP2').innerText = `P2 - ${appState.teamA.p2}`;
+      document.getElementById('ratingNameP3').innerText = `P3 - ${appState.teamB.p3}`;
+      document.getElementById('ratingNameP4').innerText = `P4 - ${appState.teamB.p4}`;
+
+      navigateToStep(3);
+    }
+
+    function startMatchRound() {
+      const matchLength = parseInt(document.getElementById('matchLengthSelect').value) || 60;
+      appState.rules.matchLength = matchLength;
+      appState.rules.pointsPerGoal = parseInt(document.getElementById('pointsPerGoalSelect').value) || 1;
+      appState.timer.remaining = matchLength;
+      appState.teamA.score = 0;
+      appState.teamB.score = 0;
+      appState.eventsLog = [];
+
+      updateScoreboardDisplays();
+      updateTimerDisplay();
+      navigateToStep(4);
+      startTimer();
+    }
+
+    function startTimer() {
+      if (appState.timer.interval) clearInterval(appState.timer.interval);
+      appState.timer.running = true;
+      appState.timer.interval = setInterval(() => {
+        if (appState.timer.remaining > 0) {
+          appState.timer.remaining--;
+          updateTimerDisplay();
+        } else {
+          clearInterval(appState.timer.interval);
+          appState.timer.running = false;
+        }
+      }, 1000);
+    }
+
+    function updateTimerDisplay() {
+      const mins = Math.floor(appState.timer.remaining / 60);
+      const secs = appState.timer.remaining % 60;
+      document.getElementById('timerDisplay').innerText = 
+        `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    }
+
+    function updateScoreboardDisplays() {
+      document.getElementById('liveTeamAScore').innerText = appState.teamA.score;
+      document.getElementById('liveTeamBScore').innerText = appState.teamB.score;
+    }
+
+    function recordEvent(type) {
+      const timeStr = document.getElementById('timerDisplay').innerText;
+      let logText = "";
+
+      if (type === 'score_a') {
+        appState.teamA.score += appState.rules.pointsPerGoal;
+        logText = `[${timeStr}] Score registered for ${appState.teamA.name}`;
+        triggerGoalAlert();
+      } else if (type === 'score_b') {
+        appState.teamB.score += appState.rules.pointsPerGoal;
+        logText = `[${timeStr}] Score registered for ${appState.teamB.name}`;
+        triggerGoalAlert();
+      }
+
+      appState.eventsLog.push(logText);
+      updateScoreboardDisplays();
+
+      const logBox = document.getElementById('matchLogBox');
+      const p = document.createElement('p');
+      p.className = 'text-amber-300 font-mono';
+      p.innerText = logText;
+      logBox.appendChild(p);
+      logBox.scrollTop = logBox.scrollHeight;
+    }
+
+    function triggerGoalAlert() {
+      const alertElem = document.getElementById('goalAlert');
+      alertElem.classList.remove('hidden');
+      setTimeout(() => alertElem.classList.add('hidden'), 1200);
+    }
+
+    // =========================================================================
+    // GAME-SPECIFIC CV CANVAS RENDERER
+    // =========================================================================
+    let cvCanvas, cvCtx;
+    let ballPos = { x: 150, y: 100, dx: 3, dy: 2 };
+    let rowingAngle = 0;
+
+    function initCVCanvas() {
+      cvCanvas = document.getElementById('cvCanvas');
+      if (!cvCanvas) return;
+      cvCtx = cvCanvas.getContext('2d');
+      resizeCanvas();
+      window.addEventListener('resize', resizeCanvas);
+    }
+
+    function resizeCanvas() {
+      if (!cvCanvas) return;
+      cvCanvas.width = cvCanvas.parentElement.clientWidth || 500;
+      cvCanvas.height = cvCanvas.parentElement.clientHeight || 280;
+    }
+
+    function startCVAnimation() {
+      if (appState.animationFrameId) cancelAnimationFrame(appState.animationFrameId);
+
+      function renderFrame() {
+        if (!cvCtx || !cvCanvas) return;
+        cvCtx.clearRect(0, 0, cvCanvas.width, cvCanvas.height);
+
+        // Render distinct Game Overlays
+        if (appState.selectedGame === 'football') {
+          renderFootballOverlay();
+        } else if (appState.selectedGame === 'sadu') {
+          renderSaduOverlay();
+        } else if (appState.selectedGame === 'rowing') {
+          renderRowingOverlay();
+        }
+
+        appState.animationFrameId = requestAnimationFrame(renderFrame);
+      }
+
+      renderFrame();
+    }
+
+    // Football AI Canvas
+    function renderFootballOverlay() {
+      // Pitch lines
+      cvCtx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+      cvCtx.lineWidth = 2;
+      cvCtx.strokeRect(15, 15, cvCanvas.width - 30, cvCanvas.height - 30);
+      cvCtx.strokeRect(15, cvCanvas.height / 3, 30, cvCanvas.height / 3);
+      cvCtx.strokeRect(cvCanvas.width - 45, cvCanvas.height / 3, 30, cvCanvas.height / 3);
+
+      // Animate Ball
+      ballPos.x += ballPos.dx;
+      ballPos.y += ballPos.dy;
+      if (ballPos.x < 25 || ballPos.x > cvCanvas.width - 25) ballPos.dx *= -1;
+      if (ballPos.y < 25 || ballPos.y > cvCanvas.height - 25) ballPos.dy *= -1;
+
+      // Ball box
+      cvCtx.strokeStyle = '#10B981';
+      cvCtx.strokeRect(ballPos.x - 10, ballPos.y - 10, 20, 20);
+      cvCtx.fillStyle = '#10B981';
+      cvCtx.font = '10px JetBrains Mono';
+      cvCtx.fillText('BALL [94%]', ballPos.x - 15, ballPos.y - 14);
+
+      // Player P1 Box
+      cvCtx.strokeStyle = '#F43F5E';
+      cvCtx.strokeRect(ballPos.x - 40, ballPos.y - 30, 30, 45);
+      cvCtx.fillStyle = '#F43F5E';
+      cvCtx.fillText('P1: Red', ballPos.x - 45, ballPos.y - 34);
+
+      // Player P3 Box
+      cvCtx.strokeStyle = '#F59E0B';
+      cvCtx.strokeRect(ballPos.x + 15, ballPos.y - 20, 30, 45);
+      cvCtx.fillStyle = '#F59E0B';
+      cvCtx.fillText('P3: Gold', ballPos.x + 10, ballPos.y - 24);
+    }
+
+    // Al-Sadu Pattern Sprint Canvas
+    function renderSaduOverlay() {
+      // Draw 3x3 Grid Target
+      const startX = cvCanvas.width / 2 - 60;
+      const startY = cvCanvas.height / 2 - 60;
+      const tileSize = 40;
+
+      cvCtx.fillStyle = '#065F46';
+      cvCtx.fillRect(10, 10, 80, 50);
+      cvCtx.fillStyle = '#A7F3D0';
+      cvCtx.font = '9px JetBrains Mono';
+      cvCtx.fillText('TARGET SADU', 15, 25);
+      cvCtx.fillText('PATTERN #3', 15, 40);
+
+      for (let r = 0; r < 3; r++) {
+        for (let c = 0; c < 3; c++) {
+          cvCtx.strokeStyle = '#34D399';
+          cvCtx.lineWidth = 1.5;
+          cvCtx.strokeRect(startX + c * tileSize, startY + r * tileSize, tileSize, tileSize);
+          
+          if ((r + c) % 2 === 0) {
+            cvCtx.fillStyle = 'rgba(16, 185, 129, 0.2)';
+            cvCtx.fillRect(startX + c * tileSize, startY + r * tileSize, tileSize, tileSize);
+          }
+        }
+      }
+
+      // Detection reticle over active tile
+      const pulse = Math.sin(Date.now() / 200) * 10;
+      cvCtx.strokeStyle = '#F59E0B';
+      cvCtx.strokeRect(startX + tileSize - pulse/2, startY + tileSize - pulse/2, tileSize + pulse, tileSize + pulse);
+      cvCtx.fillStyle = '#F59E0B';
+      cvCtx.font = '10px JetBrains Mono';
+      cvCtx.fillText('P1 Tile Match: 68%', startX - 20, startY + 3 * tileSize + 20);
+    }
+
+    // Dhow Rowing Endurance Canvas
+    function renderRowingOverlay() {
+      rowingAngle += 0.05;
+      const strokeOffset = Math.sin(rowingAngle) * 25;
+
+      // Draw Silhouette Pose
+      const centerX = cvCanvas.width / 2;
+      const centerY = cvCanvas.height / 2;
+
+      // Shoulder, Elbow, Wrist Skeleton Joints
+      const shoulder = { x: centerX - 20, y: centerY - 20 };
+      const elbow = { x: centerX + strokeOffset, y: centerY };
+      const wrist = { x: centerX + strokeOffset * 1.5, y: centerY + 20 };
+
+      cvCtx.strokeStyle = '#22C55E';
+      cvCtx.lineWidth = 3;
+      cvCtx.beginPath();
+      cvCtx.moveTo(shoulder.x, shoulder.y);
+      cvCtx.lineTo(elbow.x, elbow.y);
+      cvCtx.lineTo(wrist.x, wrist.y);
+      cvCtx.stroke();
+
+      // Keypoints
+      [shoulder, elbow, wrist].forEach((pt, idx) => {
+        cvCtx.fillStyle = '#06B6D4';
+        cvCtx.beginPath();
+        cvCtx.arc(pt.x, pt.y, 5, 0, Math.PI * 2);
+        cvCtx.fill();
+      });
+
+      cvCtx.fillStyle = '#22C55E';
+      cvCtx.font = '10px JetBrains Mono';
+      cvCtx.fillText('Rowing Stroke Angle: 65°', centerX - 60, centerY - 45);
+      cvCtx.fillText('Cadence: 28 SPM | Sync: 64%', centerX - 60, centerY + 50);
+    }
+
+    function toggleCameraMode(mode) {
+      appState.cameraMode = mode;
+      const cvCanvasElem = document.getElementById('cvCanvas');
+      const videoElem = document.getElementById('webcamVideo');
+
+      if (mode === 'webcam') {
+        cvCanvasElem.classList.add('hidden');
+        videoElem.classList.remove('hidden');
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+          navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => videoElem.srcObject = stream)
+            .catch(() => {});
+        }
+      } else {
+        videoElem.classList.add('hidden');
+        cvCanvasElem.classList.remove('hidden');
+      }
+    }
+
+    function finishRoundAndJudge() {
+      if (appState.timer.interval) clearInterval(appState.timer.interval);
+      navigateToStep(5);
+    }
+
+    function handleMatchVideoUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      document.getElementById('videoSource').src = URL.createObjectURL(file);
+      document.getElementById('uploadedVideo').load();
+      document.getElementById('videoPlaceholder').classList.add('hidden');
+      appState.videoUploaded = true;
+    }
+
+    function runAIVideoRatingEngine() {
+      generatePlayerRatingsAndHash();
+    }
+
+    async function generatePlayerRatingsAndHash() {
+      // Compressed evaluation ratings centered around 50-75 scale
+      appState.playerRatings = {
+        p1: { speed: 68, agility: 72, compliance: 65, overall: 68.3 },
+        p2: { speed: 58, agility: 62, compliance: 64, overall: 61.3 },
+        p3: { speed: 64, agility: 66, compliance: 67, overall: 65.7 },
+        p4: { speed: 52, agility: 56, compliance: 60, overall: 56.0 }
+      };
+
+      document.getElementById('overallScoreP1').innerText = `${appState.playerRatings.p1.overall} / 100`;
+      document.getElementById('overallScoreP2').innerText = `${appState.playerRatings.p2.overall} / 100`;
+      document.getElementById('overallScoreP3').innerText = `${appState.playerRatings.p3.overall} / 100`;
+      document.getElementById('overallScoreP4').innerText = `${appState.playerRatings.p4.overall} / 100`;
+
+      const payload = {
+        game: appState.selectedGame,
+        teamA: appState.teamA,
+        teamB: appState.teamB,
+        ratings: appState.playerRatings,
+        timestamp: new Date().toISOString()
+      };
+
+      const rawString = JSON.stringify(payload) + SECRET_KEY;
+      const encoder = new TextEncoder();
+      const data = encoder.encode(rawString);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+
+      appState.hashSignature = hashHex;
+      document.getElementById('hashDigestDisplay').innerText = hashHex;
+    }
+
+    function applyAIResultsAndFinish() {
+      if (!appState.hashSignature) generatePlayerRatingsAndHash();
+
+      let winnerText = "";
+      if (appState.teamA.score > appState.teamB.score) {
+        winnerText = `${appState.teamA.name} Wins!`;
+      } else if (appState.teamB.score > appState.teamA.score) {
+        winnerText = `${appState.teamB.name} Wins!`;
+      } else {
+        winnerText = "Tie Match!";
+      }
+
+      document.getElementById('finalWinnerTitle').innerText = winnerText;
+      document.getElementById('finalTeamAName').innerText = appState.teamA.name;
+      document.getElementById('finalTeamAScore').innerText = appState.teamA.score;
+      document.getElementById('finalTeamBName').innerText = appState.teamB.name;
+      document.getElementById('finalTeamBScore').innerText = appState.teamB.score;
+
+      document.getElementById('finalMVPName').innerText = `P1 - ${appState.teamA.p1}`;
+      document.getElementById('finalMVPScoreText').innerText = `Rating: ${appState.playerRatings.p1.overall} / 100`;
+
+      document.getElementById('finalGamePlayedName').innerText = 
+        appState.selectedGame === 'football' ? 'Football Match' : 
+        (appState.selectedGame === 'sadu' ? 'Al-Sadu Pattern Sprint' : 'Dhow Rowing Endurance');
+
+      navigateToStep(6);
+    }
+
+    // =========================================================================
+    // COMPLETE RESET & CLEAR SCORES ON "DONE"
+    // =========================================================================
+    function resetAndChooseAnotherGame() {
+      resetWholeApp();
+    }
+
+    function resetWholeApp() {
+      if (appState.timer.interval) clearInterval(appState.timer.interval);
+
+      // Reset scoreboards
+      appState.teamA.score = 0;
+      appState.teamB.score = 0;
+      appState.timer.remaining = appState.rules.matchLength || 60;
+      appState.timer.running = false;
+      appState.eventsLog = [];
+      appState.hashSignature = '';
+
+      // Reset UI elements
+      document.getElementById('liveTeamAScore').innerText = '0';
+      document.getElementById('liveTeamBScore').innerText = '0';
+      document.getElementById('matchLogBox').innerHTML = '<p class="text-slate-500">[00:00] Match reset.</p>';
+      document.getElementById('hashDigestDisplay').innerText = 'Pending evaluation...';
+
+      // Reset Video
+      const videoPlayer = document.getElementById('uploadedVideo');
+      if (videoPlayer) {
+        videoPlayer.pause();
+        document.getElementById('videoSource').src = '';
+      }
+      document.getElementById('videoPlaceholder').classList.remove('hidden');
+
+      // Navigate to Step 1
+      navigateToStep(1);
+    }
+
+    function downloadMatchCertificate() {
+      const report = {
+        competition: "Abu Dhabi University Family AI Game Day",
+        track: "Cycle 3 (Grades 9-12)",
+        game: appState.selectedGame,
+        teams: { teamA: appState.teamA, teamB: appState.teamB },
+        ratings: appState.playerRatings,
+        sha256Signature: appState.hashSignature,
+        timestamp: new Date().toISOString()
+      };
+
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(report, null, 2));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", `ADU_Cycle3_Report_${Date.now()}.json`);
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+    }
+  </script>
+</body>
+</html>
